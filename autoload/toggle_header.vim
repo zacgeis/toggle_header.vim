@@ -18,19 +18,17 @@ def FindExtension(path: string, extensions: list<string>): string
 enddef
 
 def g:toggle_header#toggle_header()
-  var working_directory = getcwd()
-  var current_absolute_path = expand("%:p")
-  var current_relative_path = strpart(substitute(current_absolute_path, working_directory, "", ""), 1)
+  var current_buffer_path = expand("%")
 
-  var current_split = SplitExtension(current_relative_path)
-  var target_relative_path = ""
+  var current_split = SplitExtension(current_buffer_path)
+  var target_buffer_path = ""
   if index(source_extensions, current_split[1]) != -1
-    target_relative_path = FindExtension(current_split[0], header_extensions)
+    target_buffer_path = FindExtension(current_split[0], header_extensions)
   elseif index(header_extensions, current_split[1]) != -1
-    target_relative_path = FindExtension(current_split[0], source_extensions)
+    target_buffer_path = FindExtension(current_split[0], source_extensions)
   endif
 
-  if target_relative_path != ""
-    execute("e " .. target_relative_path, "")
+  if target_buffer_path != ""
+    execute("e " .. target_buffer_path, "")
   endif
 enddef
